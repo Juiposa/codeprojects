@@ -1,0 +1,26 @@
+import java.util.Scanner;
+
+class Thirty
+{
+  public static void main (String[] args)
+  {
+    
+    Scanner scan = new Scanner(System.in);
+    
+    String first, second;
+    int firstLen, secondLen;
+    
+    
+    System.out.println("Enter in your first word: ");
+    first = scan.nextLine;
+    
+    System.out.println("Enter in your second word: ");
+    second = scan.nextLine;
+    
+    firstLen = first.Length();
+    secondLen = second.Lencth();
+    
+    
+    
+    
+    

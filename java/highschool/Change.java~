@@ -1,0 +1,33 @@
+import java.util.Scanner;
+
+class Change
+{
+  public static void main (String[] args) 
+  {
+    int change;
+    Scanner scan = new Scanner(System.in);
+    
+    System.out.println ("How much change do you need in cents?");
+    change = scan.nextInt();
+    
+    int dollar, quarter, dime, nickel, penny;
+      
+    dollar = (change / 100);
+    change = (change - dollar * 100);
+      
+    quarter = (change / 25);
+    change = (change - quarter * 25);
+      
+    dime = (change / 10);
+    change = (change - dime * 10);
+    
+    nickel = (change / 5);
+    change = (change - nickel * 5);
+    
+    penny = change;
+      
+   System.out.println ("You will need " + dollar + " dollars, " + quarter + " quarters, " + dime + " dimes, " + nickel + " nickels and " + penny + " pennies." );
+  
+  }
+}
+   

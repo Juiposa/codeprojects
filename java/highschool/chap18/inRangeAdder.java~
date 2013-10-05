@@ -1,0 +1,29 @@
+import java.util.Scanner;
+
+class inRangeAdder
+{
+  public static void main(String[] args)
+  {
+    
+    Scanner scan = new Scanner(System.in);
+    
+    int high, low, adder, sum = 0, totalNumbers = 0;
+    
+    System.out.print("Enter the low end of your range: ");
+    low = scan.nextInt();
+    
+    System.out.print("Enter in the high end of your range: ");
+    high = scan.nextInt();
+    
+    while(adder != 0)
+    {
+      System.out.print("Enter in your addition (or 0 to quit): ");
+      adder = scan.nextInt();
+      
+      sum = sum + adder
+      totalNumbers ++;
+    }
+    
+    System.out.print("You sum is " + sum + " out of " + totalNumbers + " number(s).");
+  }
+}

@@ -1,0 +1,25 @@
+import java.util.Scanner;
+  
+class HelloLoop
+{
+  public static void main(String[] args)
+  {
+    
+    Scanner scan = new Scanner(System.in);
+    
+    String inputString;
+    int times;
+    
+    
+    System.out.print("Enter your damn word mofo.");
+    inputString= scan.nextString();
+    
+    times = inputString.length();
+    
+    while(times > 0)
+    {
+      System.out.print(inputString);
+      times --;
+    }
+  }
+}

@@ -1,0 +1,13 @@
+import java.util.Scanner
+  
+class DiscountBolts
+  
+ 
+{
+  public static void main (String[] args);
+  {
+    
+    int bolts, nuts, washers;
+    final int boltPrice = 5, nutPrice = 3, washerPrice = 1;
+    
+    
