@@ -3,7 +3,7 @@ holdem.c
 A text based game of Texas Hold 'em
 coded by Jeffrey-David Kapp
 created on 7/10/2013
-last modified on 11/10/2013
+last modified on 12/10/2013
 ***********************************************/
 
 
@@ -21,22 +21,23 @@ int card[4][13]; /*card status tracking*/
 int cardSuit, cardNum; /*x y coors to be used in 2D array for former var*/ 
 int dealer = 1; /*will determine who is dealer, and who posts the blinds*/
 int playerStatus[8]; /*will be used to track status of the player's hand*/
+int player[8]; 
+int playerCash[8]; /*tracking of player's available cash*/
+int tableBet; /*highest bet that must be matched on the table*/
+int playerBet; /*the bet a player makes, whether it be mathcing or rasing*/
+int numPlayers = 0; /*number of player who will be playing*/
 
 int main()
 {
 	char confirm = 'y'; /*user input var, controls start or end of master loop*/
 	char num[6], suit[9]; /*string vars to hold names of suits and royal cards*/
-	int player[8]; 
-	int playerCash[8]; /*tracking of player's available cash*/
-	int tableBet; /*highest bet that must be matched on the table*/
-	int playerBet; /*the bet a player makes, whether it be mathcing or rasing*/
-	int numPlayers = 0; /*number of player who will be playing*/
+	char menu = 'n', menu2 = 'n'; /*menu selection variables*/
 	int pot = 0; /*value of the pot*/
 	int bigBlind = 0, smallBlind = 0; /*values user will input to set big and small blinds*/
 	int x = 0, y = 0, z = 0, xx = 0, yy = 0, zz = 0; /*misc vars and loop vars*/
 	
 	
-	while ( x == 0 ) { /*master loop*/
+	while ( confirm == 'y' ) { /*master loop*/
 	
 		while ( yy <= 4 ) { /*initialisation of cards' status*/
 			while ( zz <= 13 ) {
@@ -105,22 +106,62 @@ int main()
 		printf("Preparations complete, game will start shortly.\n");
 		sleep(3);
 		
-		while ( y == 0 ) { /*game loop*/
+		while ( y == 0 ) { /*game loop, each pass through the loop is a hand*/
 		
 			xx = 0; /*Will be using these loop vars A LOT, so reintitialising every pass through the game loop*/
 			yy = 0;
 			zz = 0;
+
+			pot = 0; /*emptying the pot*/
 			
+			printf("Cards are being dealt.\n");
 			dealing(); /*will deal two card to each player*/
+			printf("Player %d is the dealer for this hand.\n", dealer);
+			printf("Player %d posts big blind, player %d posts small blind.\n", dealer + 1, dealer + 2);
 
-			while ( xx <= numPlayers ) {
+			pot = smallBlind + bigBlind;
 
+			playerCash[dealer + 1] = playerCash[dealer + 1] - smallBlind; /*subtracting small blind from players cash*/
+			playerCash[dealer + 2] = playerCash[dealer + 2] - bigBlind; /*subtracting big blind from players cash*/
+
+			for ( xx = 1; xx <= numPlayers; xx++ ) { /*initial round of betting before the flop*/
+
+				printf("Player %d\n", xx);
+
+				x = 0;
+
+				cardListing();
+
+				printf("What action would you like to take?\n");
+
+				while ( x == 0 ){
+					printf("Check cards (q)\nCheck cash (w)\nCheck pot (e)\nCheck current bet (r)\nMake a bet (t)\n");
+
+					scanf(" %c", &menu );
+
+					switch ( menu ) { /*player action menu*/
+						case 'q': cardListing(); break; /*lists card held by player*/
+						case 'w': printf("Cash: %d\n", playerCash[xx]); break; /*lists player cash*/
+						case 'e': printf("Pot: %d\n", pot); break; /*lists value of pot*/
+						case 'r': printf("Current bet: %d\n", tableBet); break; /*current bet that must be matched*/
+						case 't': printf("Enter a bet you wish to make.\n"); /*input of a bet player wishes to make*/
+							scanf(" %d", &playerBet);
+							if( playerBet >= tableBet ) { /*if the bet matches or raises the table bet*/
+								printf("You are going to make a bet of %d. Confirm (y/n)", playerBet);
+
+								scanf(" %c", &menu2);
+
+								switch ( menu2 ) { /*evaluates player choice, and acts on bet as such*/
+									case 'y': printf("Bet commited.\n"); pot += playerBet; x = 1; break;
+									case 'n': printf("Bet redacted, returning to menu.\n"); break;
+									default: printf("Invalid input, returning to menu.\n"); break;
+								}
+							} break;
+						default: printf("Invalid selection.\n"); break;
+					}
+				}	
 			}
-			
-			
-		}	
-		
-		
+		}
 	}
 }
 
@@ -146,21 +187,20 @@ int dealing() /*function for dealing cards*/
 {
 
 	/*loop variables this function will need*/
-	int a = 0, b = 0, c = 0;
+	int a = 0, b = 0;
 	/*placeholders for values determined by rand()*/
 	int aa = 0, bb = 0, cc = 0;
-	/*misc values I might need, will remove or add as needed*/
-	int x = 0;
+	
 
 	srand(time(NULL));
 
 	for ( a = 0; a <= numPlayers; a++ ) { /*master, will terminate when all players have two cards*/
 
-		for ( b = 0; b <= 2, b++ ) {
+		for ( b = 0; b <= 2; b++ ) {
 
 			aa = rand()%5; /*suit*/
 			bb = rand()%14; /*card value*/
-			cc = ( rand()%( numPlayer + 1 ) ) + dealer; /*player this card will be given to*/
+			cc = ( rand()%( numPlayers + 1 ) ) + dealer; /*player this card will be given to*/
 
 			if ( playerStatus[cc] != 2 && card[aa][bb] == 0) { /*if player does not have two cards, and card is not dealt*/
 				
@@ -168,8 +208,13 @@ int dealing() /*function for dealing cards*/
 
 			}
 
-
 		}
 
 	}
+	return 0;
+}
+
+int cardListing() /*will list cards held by player*/
+{
+	return 0;
 }
