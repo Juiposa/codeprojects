@@ -130,7 +130,7 @@ int main()
 
 				x = 0;
 
-				cardListing();
+				cardListing(xx);
 
 				printf("What action would you like to take?\n");
 
@@ -140,7 +140,7 @@ int main()
 					scanf(" %c", &menu );
 
 					switch ( menu ) { /*player action menu*/
-						case 'q': cardListing(); break; /*lists card held by player*/
+						case 'q': cardListing(xx); break; /*lists card held by player*/
 						case 'w': printf("Cash: %d\n", playerCash[xx]); break; /*lists player cash*/
 						case 'e': printf("Pot: %d\n", pot); break; /*lists value of pot*/
 						case 'r': printf("Current bet: %d\n", tableBet); break; /*current bet that must be matched*/
@@ -205,16 +205,46 @@ int dealing() /*function for dealing cards*/
 			if ( playerStatus[cc] != 2 && card[aa][bb] == 0) { /*if player does not have two cards, and card is not dealt*/
 				
 				card[aa][bb] = cc; /* card is assigned to a player*/
-
 			}
-
 		}
-
 	}
 	return 0;
 }
 
-int cardListing() /*will list cards held by player*/
+int cardListing(int xx) /*will list cards held by player*/
 {
+
+	int x = 1, y = 1, z = 0; 
+
+	printf("You have: \n");
+
+	for ( x = 1; x <= 4; x++ ) { /*runs through all the cards to check what player has them*/
+
+		for ( y = 1; x <= 13; y++ ) {
+
+			if ( card[x][y] == xx ) {
+				switch ( x ) {
+					case 1: strcpy(cardSuit, "Diamonds"); break;
+					case 2: strcpy(cardSuit, "Clubs"); break;
+					case 3: strcpy(cardSuit, "Hearts"); break;
+					case 4: strcpy(cardSuit, "Spades"); break;
+				}
+
+				switch  ( y ) {
+					case 11: strcpy(cardName, "Jack"); break;
+					case 12: strcpy(cardName, "Queen"); break;
+					case 13: strcpy(cardName, "King"); break;
+					case 1: strcpy(cardName, "Ace"); break;
+				}
+
+				if ( cardNum >= 2 && cardNum <= 10 ) {
+					printf("%d of %s\n", y, cardSuit);
+				} else {
+					printf("%s of %s\n", cardNum, cardSuit);
+				}
+			}
+		}
+	}
+
 	return 0;
 }
