@@ -11,14 +11,17 @@ last modified on 12/10/2013
 #include <unistd.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 int numberofplayers();
 
 int dealing();
 
+int cardListing();
+
 /*master variables; ones that will be excahnging between functions quite a bit*/
 int card[4][13]; /*card status tracking*/
-int cardSuit, cardNum; /*x y coors to be used in 2D array for former var*/ 
+char cardSuit[9], cardNum[6]; /*x y coors to be used in 2D array for former var*/ 
 int dealer = 1; /*will determine who is dealer, and who posts the blinds*/
 int playerStatus[8]; /*will be used to track status of the player's hand*/
 int player[8]; 
@@ -26,6 +29,8 @@ int playerCash[8]; /*tracking of player's available cash*/
 int tableBet; /*highest bet that must be matched on the table*/
 int playerBet; /*the bet a player makes, whether it be mathcing or rasing*/
 int numPlayers = 0; /*number of player who will be playing*/
+
+
 
 int main()
 {
@@ -35,6 +40,7 @@ int main()
 	int pot = 0; /*value of the pot*/
 	int bigBlind = 0, smallBlind = 0; /*values user will input to set big and small blinds*/
 	int x = 0, y = 0, z = 0, xx = 0, yy = 0, zz = 0; /*misc vars and loop vars*/
+	
 	
 	
 	while ( confirm == 'y' ) { /*master loop*/
@@ -104,7 +110,7 @@ int main()
 		printf("Big blind is %d, small blind is %d.\n", bigBlind, smallBlind);
 		
 		printf("Preparations complete, game will start shortly.\n");
-		sleep(3);
+		sleep(1);
 		
 		while ( y == 0 ) { /*game loop, each pass through the loop is a hand*/
 		
@@ -163,6 +169,9 @@ int main()
 			}
 		}
 	}
+
+	return 0;
+	
 }
 
 int numberofplayers( int x ) /*function of number of players to be playing*/
@@ -211,10 +220,10 @@ int dealing() /*function for dealing cards*/
 	return 0;
 }
 
-int cardListing(int xx) /*will list cards held by player*/
+int cardListing( int xx ) /*will list cards held by player*/
 {
 
-	int x = 1, y = 1, z = 0; 
+	int x = 1, y = 1; 
 
 	printf("You have: \n");
 
@@ -222,7 +231,7 @@ int cardListing(int xx) /*will list cards held by player*/
 
 		for ( y = 1; x <= 13; y++ ) {
 
-			if ( card[x][y] == xx ) {
+			if ( card[x][y] == xx ) { /*assigns suit names*/
 				switch ( x ) {
 					case 1: strcpy(cardSuit, "Diamonds"); break;
 					case 2: strcpy(cardSuit, "Clubs"); break;
@@ -230,14 +239,14 @@ int cardListing(int xx) /*will list cards held by player*/
 					case 4: strcpy(cardSuit, "Spades"); break;
 				}
 
-				switch  ( y ) {
-					case 11: strcpy(cardName, "Jack"); break;
-					case 12: strcpy(cardName, "Queen"); break;
-					case 13: strcpy(cardName, "King"); break;
-					case 1: strcpy(cardName, "Ace"); break;
+				switch  ( y ) { /*assigns names to royal card names*/
+					case 11: strcpy(cardNum, "Jack"); break;
+					case 12: strcpy(cardNum, "Queen"); break;
+					case 13: strcpy(cardNum, "King"); break;
+					case 1: strcpy(cardNum, "Ace"); break;
 				}
 
-				if ( cardNum >= 2 && cardNum <= 10 ) {
+				if ( y >= 2 && y <= 10 ) {
 					printf("%d of %s\n", y, cardSuit);
 				} else {
 					printf("%s of %s\n", cardNum, cardSuit);
@@ -245,6 +254,5 @@ int cardListing(int xx) /*will list cards held by player*/
 			}
 		}
 	}
-
 	return 0;
 }
