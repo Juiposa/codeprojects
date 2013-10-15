@@ -3,7 +3,7 @@ holdem.c
 A text based game of Texas Hold 'em
 coded by Jeffrey-David Kapp
 created on 7/10/2013
-last modified on 12/10/2013
+last modified on 15/10/2013
 ***********************************************/
 
 
@@ -24,7 +24,7 @@ int card[4][13]; /*card status tracking*/
 char cardSuit[9], cardNum[6]; /*x y coors to be used in 2D array for former var*/ 
 int dealer = 1; /*will determine who is dealer, and who posts the blinds*/
 int playerStatus[8]; /*will be used to track status of the player's hand*/
-int player[8]; 
+int player[9]; 
 int playerCash[8]; /*tracking of player's available cash*/
 int tableBet; /*highest bet that must be matched on the table*/
 int playerBet; /*the bet a player makes, whether it be mathcing or rasing*/
@@ -45,8 +45,8 @@ int main()
 	
 	while ( confirm == 'y' ) { /*master loop*/
 	
-		while ( yy <= 4 ) { /*initialisation of cards' status*/
-			while ( zz <= 13 ) {
+		while ( yy <= 3 ) { /*initialisation of cards' status*/
+			while ( zz <= 12 ) {
 				card[yy][zz] = 0;
 				zz++;
 			}
@@ -198,22 +198,22 @@ int dealing() /*function for dealing cards*/
 	/*loop variables this function will need*/
 	int a = 0, b = 0;
 	/*placeholders for values determined by rand()*/
-	int aa = 0, bb = 0, cc = 0;
+	int aa = 0, bb = 0;
 	
 
 	srand(time(NULL));
 
-	for ( a = 0; a <= numPlayers; a++ ) { /*master, will terminate when all players have two cards*/
+	for ( a = 1; a <= numPlayers; a++ ) { /*master, will terminate when all players have two cards*/
 
-		for ( b = 0; b <= 2; b++ ) {
+		for ( b = 1; b <= 2; b++ ) {
 
-			aa = rand()%5; /*suit*/
-			bb = rand()%14; /*card value*/
-			cc = ( rand()%( numPlayers + 1 ) ) + dealer; /*player this card will be given to*/
+			aa = rand()%4; /*suit*/
+			bb = rand()%13; /*card value*/
 
-			if ( playerStatus[cc] != 2 && card[aa][bb] == 0) { /*if player does not have two cards, and card is not dealt*/
+			if ( playerStatus[a] != 2 && card[aa][bb] == 0 ) { /*if player does not have two cards, and card is not dealt*/
 				
-				card[aa][bb] = cc; /* card is assigned to a player*/
+				card[aa][bb] = a; /* card is assigned to a player*/
+				playerStatus[a]++;
 			}
 		}
 	}
@@ -223,27 +223,27 @@ int dealing() /*function for dealing cards*/
 int cardListing( int xx ) /*will list cards held by player*/
 {
 
-	int x = 1, y = 1; 
+	int x = 0, y = 0; 
 
 	printf("You have: \n");
 
-	for ( x = 1; x <= 4; x++ ) { /*runs through all the cards to check what player has them*/
+	for ( x = 0; x <= 3; x++ ) { /*runs through all the cards to check what player has them*/
 
-		for ( y = 1; x <= 13; y++ ) {
+		for ( y = 0; y <= 12; y++ ) {
 
 			if ( card[x][y] == xx ) { /*assigns suit names*/
 				switch ( x ) {
-					case 1: strcpy(cardSuit, "Diamonds"); break;
-					case 2: strcpy(cardSuit, "Clubs"); break;
-					case 3: strcpy(cardSuit, "Hearts"); break;
-					case 4: strcpy(cardSuit, "Spades"); break;
+					case 0: strcpy(cardSuit, "Diamonds"); break;
+					case 1: strcpy(cardSuit, "Clubs"); break;
+					case 2: strcpy(cardSuit, "Hearts"); break;
+					case 3: strcpy(cardSuit, "Spades"); break;
 				}
 
-				switch  ( y ) { /*assigns names to royal card names*/
-					case 11: strcpy(cardNum, "Jack"); break;
-					case 12: strcpy(cardNum, "Queen"); break;
-					case 13: strcpy(cardNum, "King"); break;
-					case 1: strcpy(cardNum, "Ace"); break;
+				switch  ( y ) { /*assigns names to royal cards*/
+					case 10: strcpy(cardNum, "Jack"); break;
+					case 11: strcpy(cardNum, "Queen"); break;
+					case 12: strcpy(cardNum, "King"); break;
+					case 0: strcpy(cardNum, "Ace"); break;
 				}
 
 				if ( y >= 2 && y <= 10 ) {
