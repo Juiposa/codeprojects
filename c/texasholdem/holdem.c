@@ -198,7 +198,7 @@ int dealing() /*function for dealing cards*/
 {
 
 	/*loop variables this function will need*/
-	int a = 0, b = 0;
+	int a = 0, b = 1;
 	/*placeholders for values determined by rand()*/
 	int aa = 0, bb = 0;
 	
@@ -207,15 +207,17 @@ int dealing() /*function for dealing cards*/
 
 	for ( a = 1; a <= numPlayers; a++ ) { /*runs through each player*/
 
-		for ( playerStatus[a] = 0; playerStatus[a] <= 2; playerStatus[a]++ ) { /*two cards for each player*/
+		for ( playerStatus[a] = 1; playerStatus[a] <= 2; playerStatus[a]++ ) { /*two cards for each player*/
 
 			do { /*loops if the card randomised is not in the deck*/
 
 				aa = rand()%4;
 				bb = rand()%13;
-				printf("loop\n");
+				printf("%d\n", b);
 
-			} while ( card[aa][bb] == 0 );
+			} while ( card[aa][bb] < 0 );
+
+			b++;
 
 			card[aa][bb] = a; /*assigns card to player if everything checks out*/
 		}
