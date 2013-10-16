@@ -165,6 +165,8 @@ int main()
 							} break;
 						default: printf("Invalid selection.\n"); break;
 					}
+
+
 				}	
 			}
 		}
@@ -203,18 +205,19 @@ int dealing() /*function for dealing cards*/
 
 	srand(time(NULL));
 
-	for ( a = 1; a <= numPlayers; a++ ) { /*master, will terminate when all players have two cards*/
+	for ( a = 1; a <= numPlayers; a++ ) { /*runs through each player*/
 
-		for ( b = 1; b <= 2; b++ ) {
+		for ( playerStatus[a] = 0; playerStatus[a] <= 2; playerStatus[a]++ ) { /*two cards for each player*/
 
-			aa = rand()%4; /*suit*/
-			bb = rand()%13; /*card value*/
+			do { /*loops if the card randomised is not in the deck*/
 
-			if ( playerStatus[a] != 2 && card[aa][bb] == 0 ) { /*if player does not have two cards, and card is not dealt*/
-				
-				card[aa][bb] = a; /* card is assigned to a player*/
-				playerStatus[a]++;
-			}
+				aa = rand()%4;
+				bb = rand()%13;
+				printf("loop\n");
+
+			} while ( card[aa][bb] == 0 );
+
+			card[aa][bb] = a; /*assigns card to player if everything checks out*/
 		}
 	}
 	return 0;
