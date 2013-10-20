@@ -3,7 +3,7 @@ holdem.c
 A text based game of Texas Hold 'em
 coded by Jeffrey-David Kapp
 created on 7/10/2013
-last modified on 15/10/2013
+last modified on 20/10/2013
 ***********************************************/
 
 
