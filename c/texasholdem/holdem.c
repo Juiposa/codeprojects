@@ -130,6 +130,22 @@ int main()
 			playerCash[dealer + 1] = playerCash[dealer + 1] - smallBlind; /*subtracting small blind from players cash*/
 			playerCash[dealer + 2] = playerCash[dealer + 2] - bigBlind; /*subtracting big blind from players cash*/
 
+			/*temporary loop to list states of cards*/
+
+			int a = 0, b = 0;
+
+			for ( a = 0; a <= 3; a++ ) {
+
+				for ( b = 0; b <= 12; b++ ) {
+					printf("%d%d%d ", a, b, card[a][b]);
+				}
+
+				printf("\n");
+			}
+
+
+
+
 			for ( xx = 1; xx <= numPlayers; xx++ ) { /*initial round of betting before the flop*/
 
 				printf("Player %d\n", xx);
@@ -211,11 +227,10 @@ int dealing() /*function for dealing cards*/
 
 			do { /*loops if the card randomised is not in the deck*/
 
-				aa = rand()%4;
-				bb = rand()%13;
-				printf("%d\n", b);
-
-			} while ( card[aa][bb] < 0 );
+				aa = ( rand()%5 ) - 1.0;
+				bb = ( rand()%14 ) - 1.0;
+				
+			} while ( card[aa][bb] != 0 );
 
 			b++;
 
@@ -232,9 +247,9 @@ int cardListing( int xx ) /*will list cards held by player*/
 
 	printf("You have: \n");
 
-	for ( x = 0; x <= 3; x++ ) { /*runs through all the cards to check what player has them*/
+	while ( x <= 3 ) { /*runs through all the cards to check what player has them*/
 
-		for ( y = 0; y <= 12; y++ ) {
+		while ( y <= 12 ) {
 
 			if ( card[x][y] == xx ) { /*assigns suit names*/
 				switch ( x ) {
@@ -251,13 +266,15 @@ int cardListing( int xx ) /*will list cards held by player*/
 					case 0: strcpy(cardNum, "Ace"); break;
 				}
 
-				if ( y >= 2 && y <= 10 ) {
+				if ( y >= 1 && y <= 9 ) {
 					printf("%d of %s\n", y, cardSuit);
 				} else {
 					printf("%s of %s\n", cardNum, cardSuit);
 				}
 			}
+			y++;
 		}
+		x++;
 	}
 	return 0;
 }
