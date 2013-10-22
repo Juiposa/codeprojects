@@ -3,7 +3,7 @@ holdem.c
 A text based game of Texas Hold 'em
 coded by Jeffrey-David Kapp
 created on 7/10/2013
-last modified on 15/10/2013
+last modified on 20/10/2013
 ***********************************************/
 
 
@@ -130,9 +130,9 @@ int main()
 			playerCash[dealer + 1] = playerCash[dealer + 1] - smallBlind; /*subtracting small blind from players cash*/
 			playerCash[dealer + 2] = playerCash[dealer + 2] - bigBlind; /*subtracting big blind from players cash*/
 
-			/*temporary loop to list states of cards*/
+			/*temporary loops for checking states*/
 
-			int a = 0, b = 0;
+			int a = 0, b = 0, c = 0;
 
 			for ( a = 0; a <= 3; a++ ) {
 
@@ -142,9 +142,9 @@ int main()
 
 				printf("\n");
 			}
-
-
-
+			for ( c = 0; c <= numPlayers; c++){
+				printf(" %d\n", playerStatus[c]);
+			}
 
 			for ( xx = 1; xx <= numPlayers; xx++ ) { /*initial round of betting before the flop*/
 
@@ -227,12 +227,10 @@ int dealing() /*function for dealing cards*/
 
 			do { /*loops if the card randomised is not in the deck*/
 
-				aa = ( rand()%5 ) - 1.0;
-				bb = ( rand()%14 ) - 1.0;
+				aa = rand()%4;
+				bb = rand()%13;
 				
 			} while ( card[aa][bb] != 0 );
-
-			b++;
 
 			card[aa][bb] = a; /*assigns card to player if everything checks out*/
 		}
@@ -247,9 +245,9 @@ int cardListing( int xx ) /*will list cards held by player*/
 
 	printf("You have: \n");
 
-	for ( x = 0; x <= 3; x++ ) { /*runs through all the cards to check what player has them*/
+	for( x = 0; x <= 3; x++ ) { /*runs through all the cards to check what player has them*/
 
-		for ( y = 0; y <= 12; y++ ) {
+		for( y = 0; y <= 12; y++ ) {
 
 			if ( card[x][y] == xx ) { /*assigns suit names*/
 				switch ( x ) {
@@ -268,8 +266,10 @@ int cardListing( int xx ) /*will list cards held by player*/
 
 				if ( y >= 1 && y <= 9 ) {
 					printf("%d of %s\n", y, cardSuit);
-				} else {
+				} else  if ( y == 0 || ( y > 9 && y <= 13 ) ) {
 					printf("%s of %s\n", cardNum, cardSuit);
+				} else {
+					printf("Printing error.\n");
 				}
 			}
 		}

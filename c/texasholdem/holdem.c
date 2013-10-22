@@ -17,6 +17,8 @@ int numberofplayers();
 
 int dealing();
 
+int betting();
+
 int cardListing();
 
 /*master variables; ones that will be excahnging between functions quite a bit*/
@@ -27,8 +29,10 @@ int playerStatus[8]; /*will be used to track status of the player's hand*/
 int player[9]; 
 int playerCash[8]; /*tracking of player's available cash*/
 int tableBet; /*highest bet that must be matched on the table*/
+int pot = 0; /*value of the pot*/
 int playerBet; /*the bet a player makes, whether it be mathcing or rasing*/
 int numPlayers = 0; /*number of player who will be playing*/
+int x = 0, y = 0, z = 0, xx = 0, yy = 0, zz = 0; /*misc vars and loop vars*/
 
 
 
@@ -36,10 +40,8 @@ int main()
 {
 	char confirm = 'y'; /*user input var, controls start or end of master loop*/
 	char num[6], suit[9]; /*string vars to hold names of suits and royal cards*/
-	char menu = 'n', menu2 = 'n'; /*menu selection variables*/
-	int pot = 0; /*value of the pot*/
 	int bigBlind = 0, smallBlind = 0; /*values user will input to set big and small blinds*/
-	int x = 0, y = 0, z = 0, xx = 0, yy = 0, zz = 0; /*misc vars and loop vars*/
+	int betState = 0; /*the betting state, decides what type of betting round should be triggered*/
 	
 	
 	
@@ -146,45 +148,8 @@ int main()
 				printf(" %d\n", playerStatus[c]);
 			}
 
-			for ( xx = 1; xx <= numPlayers; xx++ ) { /*initial round of betting before the flop*/
-
-				printf("Player %d\n", xx);
-
-				x = 0;
-
-				cardListing(xx);
-
-				printf("What action would you like to take?\n");
-
-				while ( x == 0 ){
-					printf("Check cards (q)\nCheck cash (w)\nCheck pot (e)\nCheck current bet (r)\nMake a bet (t)\n");
-
-					scanf(" %c", &menu );
-
-					switch ( menu ) { /*player action menu*/
-						case 'q': cardListing(xx); break; /*lists card held by player*/
-						case 'w': printf("Cash: %d\n", playerCash[xx]); break; /*lists player cash*/
-						case 'e': printf("Pot: %d\n", pot); break; /*lists value of pot*/
-						case 'r': printf("Current bet: %d\n", tableBet); break; /*current bet that must be matched*/
-						case 't': printf("Enter a bet you wish to make.\n"); /*input of a bet player wishes to make*/
-							scanf(" %d", &playerBet);
-							if( playerBet >= tableBet ) { /*if the bet matches or raises the table bet*/
-								printf("You are going to make a bet of %d. Confirm (y/n)", playerBet);
-
-								scanf(" %c", &menu2);
-
-								switch ( menu2 ) { /*evaluates player choice, and acts on bet as such*/
-									case 'y': printf("Bet commited.\n"); pot += playerBet; x = 1; break;
-									case 'n': printf("Bet redacted, returning to menu.\n"); break;
-									default: printf("Invalid input, returning to menu.\n"); break;
-								}
-							} break;
-						default: printf("Invalid selection.\n"); break;
-					}
-
-
-				}	
-			}
+			betting(betState);
+			
 		}
 	}
 
@@ -258,21 +223,72 @@ int cardListing( int xx ) /*will list cards held by player*/
 				}
 
 				switch  ( y ) { /*assigns names to royal cards*/
+					case 0: strcpy(cardNum, "Ace"); break;
+					case 1: strcpy(cardNum, "Two"); break;
+					case 2: strcpy(cardNum, "Three"); break;
+					case 3: strcpy(cardNum, "Four"); break;
+					case 4: strcpy(cardNum, "Five"); break;
+					case 5: strcpy(cardNum, "Six"); break;
+					case 6: strcpy(cardNum, "Seven"); break;
+					case 7: strcpy(cardNum, "Eight"); break;
+					case 8: strcpy(cardNum, "Nine"); break;
+					case 9: strcpy(cardNum, "Ten"); break;
 					case 10: strcpy(cardNum, "Jack"); break;
 					case 11: strcpy(cardNum, "Queen"); break;
 					case 12: strcpy(cardNum, "King"); break;
-					case 0: strcpy(cardNum, "Ace"); break;
+					
 				}
 
-				if ( y >= 1 && y <= 9 ) {
-					printf("%d of %s\n", y, cardSuit);
-				} else  if ( y == 0 || ( y > 9 && y <= 13 ) ) {
-					printf("%s of %s\n", cardNum, cardSuit);
-				} else {
-					printf("Printing error.\n");
-				}
+				printf("%s of %s\n", cardNum, cardSuit);
 			}
 		}
 	}
 	return 0;
+}
+
+int betting( int state ) /* betting function*/
+{
+
+	char menu = 'n', menu2 = 'n'; /*menu selection variables*/
+
+	for ( xx = 1; xx <= numPlayers; xx++ ) { /*initial round of betting before the flop*/
+
+		printf("Player %d\n", xx);
+
+		x = 0;
+
+		cardListing(xx);
+
+		printf("What action would you like to take?\n");
+
+		while ( x == 0 ){
+			printf("Check cards (q)\nCheck cash (w)\nCheck pot (e)\nCheck current bet (r)\nMake a bet (t)\n");
+
+			scanf(" %c", &menu );
+
+			switch ( menu ) { /*player action menu*/
+				case 'q': cardListing(xx); break; /*lists card held by player*/
+				case 'w': printf("Cash: %d\n", playerCash[xx]); break; /*lists player cash*/
+				case 'e': printf("Pot: %d\n", pot); break; /*lists value of pot*/
+				case 'r': printf("Current bet: %d\n", tableBet); break; /*current bet that must be matched*/
+				case 't': printf("Enter a bet you wish to make.\n"); /*input of a bet player wishes to make*/
+					scanf(" %d", &playerBet);
+					if( playerBet >= tableBet ) { /*if the bet matches or raises the table bet*/
+						printf("You are going to make a bet of %d. Confirm (y/n)", playerBet);
+
+						scanf(" %c", &menu2);
+
+						switch ( menu2 ) { /*evaluates player choice, and acts on bet as such*/
+							case 'y': printf("Bet commited.\n"); pot += playerBet; x = 1; break;
+							case 'n': printf("Bet redacted, returning to menu.\n"); break;
+							default: printf("Invalid input, returning to menu.\n"); break;
+						}
+					} break;
+				default: printf("Invalid selection.\n"); break;
+			}
+		}
+	}
+
+	return 0;
+
 }
