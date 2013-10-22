@@ -245,9 +245,9 @@ int cardListing( int xx ) /*will list cards held by player*/
 
 	printf("You have: \n");
 
-	while ( x <= 3 ) { /*runs through all the cards to check what player has them*/
+	for( x = 0; x <= 3; x++ ) { /*runs through all the cards to check what player has them*/
 
-		while ( y <= 12 ) {
+		for( y = 0; y <= 12; y++ ) {
 
 			if ( card[x][y] == xx ) { /*assigns suit names*/
 				switch ( x ) {
@@ -266,13 +266,13 @@ int cardListing( int xx ) /*will list cards held by player*/
 
 				if ( y >= 1 && y <= 9 ) {
 					printf("%d of %s\n", y, cardSuit);
-				} else {
+				} else  if ( y == 0 || ( y > 9 && y <= 13 ) ) {
 					printf("%s of %s\n", cardNum, cardSuit);
+				} else {
+					printf("Printing error.\n");
 				}
 			}
-			y++;
 		}
-		x++;
 	}
 	return 0;
 }
