@@ -3,7 +3,7 @@ holdem.c
 A text based game of Texas Hold 'em
 coded by Jeffrey-David Kapp
 created on 7/10/2013
-last modified on 20/10/2013
+last modified on 23/10/2013
 ***********************************************/
 
 
@@ -132,22 +132,6 @@ int main()
 			playerCash[dealer + 1] = playerCash[dealer + 1] - smallBlind; /*subtracting small blind from players cash*/
 			playerCash[dealer + 2] = playerCash[dealer + 2] - bigBlind; /*subtracting big blind from players cash*/
 
-			/*temporary loops for checking states*/
-
-			int a = 0, b = 0, c = 0;
-
-			for ( a = 0; a <= 3; a++ ) {
-
-				for ( b = 0; b <= 12; b++ ) {
-					printf("%d%d%d ", a, b, card[a][b]);
-				}
-
-				printf("\n");
-			}
-			for ( c = 0; c <= numPlayers; c++){
-				printf(" %d\n", playerStatus[c]);
-			}
-
 			betting(betState);
 			
 		}
@@ -262,7 +246,7 @@ int betting( int state ) /* betting function*/
 		printf("What action would you like to take?\n");
 
 		while ( x == 0 ){
-			printf("Check cards (q)\nCheck cash (w)\nCheck pot (e)\nCheck current bet (r)\nMake a bet (t)\n");
+			printf("Check cards (q)\nCheck cash (w)\nCheck pot (e)\nCheck current bet (r)\nMake a bet (t)\nFold (y)\n");
 
 			scanf(" %c", &menu );
 
@@ -272,17 +256,23 @@ int betting( int state ) /* betting function*/
 				case 'e': printf("Pot: %d\n", pot); break; /*lists value of pot*/
 				case 'r': printf("Current bet: %d\n", tableBet); break; /*current bet that must be matched*/
 				case 't': printf("Enter a bet you wish to make.\n"); /*input of a bet player wishes to make*/
+					
 					scanf(" %d", &playerBet);
-					if( playerBet >= tableBet ) { /*if the bet matches or raises the table bet*/
+					tableBet = 1;
+
+					if ( playerBet >= tableBet ) { /*if the bet matches or raises the table bet*/
 						printf("You are going to make a bet of %d. Confirm (y/n)", playerBet);
 
 						scanf(" %c", &menu2);
 
 						switch ( menu2 ) { /*evaluates player choice, and acts on bet as such*/
-							case 'y': printf("Bet commited.\n"); pot += playerBet; x = 1; break;
+							case 'y': printf("Bet commited.\n"); pot += playerBet; tableBet = playerBet; x = 1; break;
 							case 'n': printf("Bet redacted, returning to menu.\n"); break;
 							default: printf("Invalid input, returning to menu.\n"); break;
 						}
+
+					} else {
+						printf("Bet has been raised to %d, please enter a value higher or equal to it.\n", tableBet);
 					} break;
 				default: printf("Invalid selection.\n"); break;
 			}
