@@ -260,7 +260,7 @@ int betting( int state ) /* betting function*/
 					scanf(" %d", &playerBet);
 					tableBet = 1;
 
-					if ( playerBet >= tableBet ) { /*if the bet matches or raises the table bet*/
+					if ( tableBet <= playerBet ) { /*if the bet matches or raises the table bet*/
 						printf("You are going to make a bet of %d. Confirm (y/n)", playerBet);
 
 						scanf(" %c", &menu2);
@@ -278,7 +278,5 @@ int betting( int state ) /* betting function*/
 			}
 		}
 	}
-
 	return 0;
-
 }
