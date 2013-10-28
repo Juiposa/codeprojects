@@ -233,6 +233,8 @@ int cardListing( int xx ) /*will list cards held by player*/
 int betting( int state ) /* betting function*/
 {
 
+	tableBet = 1;
+
 	char menu = 'n', menu2 = 'n'; /*menu selection variables*/
 
 	for ( xx = 1; xx <= numPlayers; xx++ ) { /*initial round of betting before the flop*/
@@ -258,10 +260,10 @@ int betting( int state ) /* betting function*/
 				case 't': printf("Enter a bet you wish to make.\n"); /*input of a bet player wishes to make*/
 					
 					scanf(" %d", &playerBet);
-					tableBet = 1;
+					
 
 					if ( tableBet <= playerBet ) { /*if the bet matches or raises the table bet*/
-						printf("You are going to make a bet of %d. Confirm (y/n)", playerBet);
+						printf("You are going to make a bet of %d. Confirm (y/n)\n", playerBet);
 
 						scanf(" %c", &menu2);
 
@@ -271,9 +273,39 @@ int betting( int state ) /* betting function*/
 							default: printf("Invalid input, returning to menu.\n"); break;
 						}
 
+						printf("%d\n", tableBet );
+
 					} else {
 						printf("Bet has been raised to %d, please enter a value higher or equal to it.\n", tableBet);
 					} break;
+
+				case 'y': printf("Confirm you are choosing to fold? (y/n)\n");
+					
+					scanf( " %c", &menu2 );
+					if ( menu2 == 'y' ){ /*if user chooses to fold*/
+						printf("You are folding.\n");
+						playerStatus[xx] = 0; /*resets to player having no cards*/
+
+						int q, w;
+
+						for ( q = 0; q <= 3; q++ ) { /*will check every card for which the play holds and set them to -1*/
+														 /*-1 will denote that the card has been discarded*/
+							for ( w = 0; w <= 12; w++ ) {
+
+								if ( card[q][w] == xx ) {
+
+									card[q][w] = -1;
+									
+								}
+							}
+						}
+						
+						x = 1;
+
+					} else {
+						printf("Not folding, defaulting to menu.\n");
+					} break;
+
 				default: printf("Invalid selection.\n"); break;
 			}
 		}
