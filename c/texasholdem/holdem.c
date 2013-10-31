@@ -17,9 +17,11 @@ int numberofplayers();
 
 int dealing();
 
-int betting();
+int betting( int );
 
-int cardListing();
+int cardListing( int );
+
+int flop();
 
 /*master variables; ones that will be excahnging between functions quite a bit*/
 int card[4][13]; /*card status tracking*/
@@ -115,10 +117,6 @@ int main()
 		sleep(1);
 		
 		while ( y == 0 ) { /*game loop, each pass through the loop is a hand*/
-		
-			xx = 0; /*Will be using these loop vars A LOT, so reintitialising every pass through the game loop*/
-			yy = 0;
-			zz = 0;
 
 			pot = 0; /*emptying the pot*/
 			
@@ -132,6 +130,13 @@ int main()
 			playerCash[dealer + 1] = playerCash[dealer + 1] - smallBlind; /*subtracting small blind from players cash*/
 			playerCash[dealer + 2] = playerCash[dealer + 2] - bigBlind; /*subtracting big blind from players cash*/
 
+			betting(betState); /*calling to have player place their initial bets*/
+			betting(betState); /*twice*/
+
+			betState = flop(); /*calling for the first three cards to flopped*/
+
+			printf("Cards have been flopped.\n")
+
 			betting(betState);
 			
 		}
@@ -141,8 +146,10 @@ int main()
 	
 }
 
-int numberofplayers( int x ) /*function of number of players to be playing*/
+int numberofplayers() /*function of number of players to be playing*/
 {
+
+	int x = 0;
 
 	printf("How many people will be playing?\n");
 
@@ -162,8 +169,8 @@ return x;
 int dealing() /*function for dealing cards*/
 {
 
-	/*loop variables this function will need*/
-	int a = 0, b = 1;
+	/*loop variable this function will need*/
+	int a = 0;
 	/*placeholders for values determined by rand()*/
 	int aa = 0, bb = 0;
 	
@@ -191,8 +198,6 @@ int cardListing( int xx ) /*will list cards held by player*/
 {
 
 	int x = 0, y = 0; 
-
-	printf("You have: \n");
 
 	for( x = 0; x <= 3; x++ ) { /*runs through all the cards to check what player has them*/
 
@@ -247,17 +252,23 @@ int betting( int state ) /* betting function*/
 
 		printf("What action would you like to take?\n");
 
-		while ( x == 0 ){
-			printf("Check cards (q)\nCheck cash (w)\nCheck pot (e)\nCheck current bet (r)\nMake a bet (t)\nFold (y)\n");
+		while ( x == 0 ) {
+			
+			printf("Cards (q)\nCash (w)\nPot (e)\nCurrent bet (r)\nMake a bet (a)\nFold (s)\n");
+
+			if ( state == 1 ) { /*execute once flop has been carried out*/
+
+				printf("Cards on table (d)\nCheck (f)\n");
+			}
 
 			scanf(" %c", &menu );
 
 			switch ( menu ) { /*player action menu*/
-				case 'q': cardListing(xx); break; /*lists card held by player*/
+				case 'q': printf("You have: \n"); cardListing(xx);  break; /*lists card held by player*/
 				case 'w': printf("Cash: %d\n", playerCash[xx]); break; /*lists player cash*/
 				case 'e': printf("Pot: %d\n", pot); break; /*lists value of pot*/
 				case 'r': printf("Current bet: %d\n", tableBet); break; /*current bet that must be matched*/
-				case 't': printf("Enter a bet you wish to make.\n"); /*input of a bet player wishes to make*/
+				case 'a': printf("Enter a bet you wish to make.\n"); /*input of a bet player wishes to make*/
 					
 					scanf(" %d", &playerBet);
 					
@@ -279,7 +290,7 @@ int betting( int state ) /* betting function*/
 						printf("Bet has been raised to %d, please enter a value higher or equal to it.\n", tableBet);
 					} break;
 
-				case 'y': printf("Confirm you are choosing to fold? (y/n)\n");
+				case 's': printf("Confirm you are choosing to fold? (y/n)\n");
 					
 					scanf( " %c", &menu2 );
 					if ( menu2 == 'y' ){ /*if user chooses to fold*/
@@ -288,8 +299,8 @@ int betting( int state ) /* betting function*/
 
 						int q, w;
 
-						for ( q = 0; q <= 3; q++ ) { /*will check every card for which the play holds and set them to -1*/
-														 /*-1 will denote that the card has been discarded*/
+						for ( q = 0; q <= 3; q++ ) { 	/*will check every card for which the play holds and set them to -1*/
+														/*-1 will denote that the card has been discarded*/
 							for ( w = 0; w <= 12; w++ ) {
 
 								if ( card[q][w] == xx ) {
@@ -304,11 +315,38 @@ int betting( int state ) /* betting function*/
 
 					} else {
 						printf("Not folding, defaulting to menu.\n");
-					} break;
+					} 
+					break;
+				case 'd': printf("Cards on the table:\n");
+					int temp = 9; /*temp var, will pass into cardListing()*/
+					cardListing( temp );
+					break; 
 
 				default: printf("Invalid selection.\n"); break;
 			}
-		}
+		} /*end of initial betting*/
 	}
 	return 0;
+}
+
+/*function will randomise and deal 3 cards to the table
+as part of the first flop*/
+int flop()
+{
+
+	int aa = 0, bb = 0; /*rand() variables*/
+
+	for ( x = 0; x <= 3; x++ ) { /*flopping three cards, rand() a card, check its status*/
+
+		aa = rand()%4;
+		bb = rand()%13;
+
+		if ( card[aa][bb] == 0) {
+			card[aa][bb] = 9; /*assigned value of 9, 9 will represent a card on the table*/
+		}
+
+	}
+
+	return 1; /*returned value to tell betting() how to list next round of betting*/
+
 }
