@@ -121,7 +121,7 @@ int main()
 			pot = 0; /*emptying the pot*/
 			
 			printf("Cards are being dealt.\n");
-			dealing(); /*will deal two card to each player*/
+			dealing(); /*will deal two cards to each player*/
 			printf("Player %d is the dealer for this hand.\n", dealer);
 			printf("Player %d posts big blind, player %d posts small blind.\n", dealer + 1, dealer + 2);
 
@@ -137,7 +137,7 @@ int main()
 
 			printf("Cards have been flopped.\n")
 
-			betting(betState);
+			betting(betState); /*passing value from flop(), enabling checking and checking table cards*/
 			
 		}
 	}
