@@ -6,7 +6,7 @@ created
 25/11/2013
 
 last modified
-25/11/2013
+26/11/2013
 
 Version: 0.1
 
@@ -22,6 +22,7 @@ Creating a text based emulator of a Nazi German Enigma Code machine.
 #define MAXSIZE 100
 
 /*rotor strings*/
+#define ALPHABET "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 #define ROTORI "EKMFLGDQVZNTOWYHXUSPAIBRCJ"
 #define ROTORII "AJDKSIRUXBLHWTMCQGZNPYFVOE"
 #define ROTORIII "BDFHJLCPRTXVZNYEIWGAKMUSQO"
@@ -31,8 +32,22 @@ Creating a text based emulator of a Nazi German Enigma Code machine.
 
 int masterMenu( char userName[MAXSIZE] );
 
+char * stringGet();
 
+char * encoding( char inputString[MAXSIZE] );
 
+char charExchangeRotor( char char_ );
+
+char charExchangeReflector( char char_ );
+
+char charExchangeSwitchBoard( char char_ );
+
+int * rotorPositionSet();
+
+typedef struct rotorSettings { /*the rotors setting, postions and what slots the user chooses to put them in*/
+	int postion[3], slot[3];
+	char name[MAXSIZE];
+}rtrset;
 
 int main()
 {
@@ -85,7 +100,7 @@ int main()
 						printf("Please enter only one character.\n");
 					}
 
-				} while ( exitMenuStr[0] != 'x' && exitMenuStr != 'r' && strlen(exitMenuStr) != 2 );
+				} while ( exitMenuStr[0] != 'x' && exitMenuStr != 'r' && strlen(exitMenuStr) != 2 ); /*if the inputted value is not one of the two valid inputs and more than one character has been inputted*/
 
 				switch ( exitMenuStr[0] ) {
 					case 'r': 
@@ -105,7 +120,106 @@ int main()
 
 }
 
+/*master control function, holds master menu and program will mainly work from this function*/
 int masterMenu( char userName[MAXSIZE] )
+{
+	
+	/*****************
+	function variables
+	*****************/
+
+	/*menu control related variables*/
+	char menuControlStr[MAXSIZE];
+	int menuStatus;
+
+	/*input and returned strings*/
+	char inputString[MAXSIZE]; /*string to be returned from stringGet fucntion*/
+	char encodedString[MAXSIZE]; /*string that will returned after each char has been encoded*/
+
+	/*rotor and switch board settings*/
+	/*arrays returned from their respective function*/
+	int * rotorPositions;
+	int * switchboardSettings;
+
+	/*loop vars and misc operators*/
+	int x = 0, y = 0, z = 0;
+
+
+
+}
+
+/*will get the string the user will wish to encode*/
+char * stringGet()
+{
+	/*****************
+	function variables
+	*****************/
+
+	/*user inputted string*/
+	static char inputString[MAXSIZE];
+
+	/*loop vars and misc operators*/
+	int x = 0, y = 0, z = 0;
+
+
+
+}
+
+/*function that will trigger the encoding/decoding process*/
+char * encoding( char inputString[MAXSIZE], int * rotorPositions )
+{
+
+	/*****************
+	function variables
+	*****************/
+
+	/*string to be built from coding functions and returned*/
+	char encodedString[MAXSIZE];
+
+	/*char to be passed to exchaning functions*/
+	char char_;
+	char tempChar;
+
+
+	/*loop vars and misc operators*/
+	int x = 0, y = 0, z = 0;
+
+
+}
+
+/*exchanging individual characters through the three rotors*/
+char charExchangeRotor( char char_, int direction, int * rotorPositions )
+{
+	/*****************
+	function variables
+	*****************/
+
+	/*rotor settings*/
+	rotorPostion[3]; /*will hold what postion the user 
+	whichRotor[3];
+	
+}
+
+/*exchanging the character through the rotor placed as the reflector*/
+char charExchangeReflector( char char_ )
+{
+
+}
+
+/*exchaning the character through the switch board based on how the users sets it*/
+char charExchangeSwitchBoard( char char_ )
+{
+
+}
+
+/*setting the rotor to be placed in the slot and the position to set it to*/
+int * rotorPositionSet()
+{
+
+}
+
+/*setting the 13 positions of the switchboard*/
+int * switchBoardSet()
 {
 
 }
